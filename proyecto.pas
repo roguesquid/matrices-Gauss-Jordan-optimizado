@@ -1,6 +1,160 @@
 Program proyecto;
 uses crt;
 
+procedure submenu11 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                     SUB MENU 1.1 LEER MATRIZ DESDE TECLADO                     ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu12 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                     SUB MENU 1.2 LEER MATRIZ DESDE ARCHIVO                     ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu13 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                           SUB MENU 1.3 MOSTRAR MATRIZ                          ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu14 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('            SUB MENU 1.4 MODIFICAR ELEMENTOS EN LA MATRIZ MANUALMENTE           ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu15 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                    SUB MENU 1.5 ALMACENAR MATRIZ EN ARCHIVO                    ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu21 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('         SUB MENU 2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA        ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu22 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('              SUB MENU 2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA              ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu23 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                  SUB MENU 2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO                  ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu24 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('           SUB MENU 2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE           ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu25 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('        SUB MENU 2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCIÓN        ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu31 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                       SUB MENU 3.1 HALLAR MATRIZ INVERSA                       ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu32 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                       SUB MENU 3.2 MOSTAR MATRIZ INVERSA                       ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu33 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('                     SUB MENU 3.3 COMPROBAR MATRIZ INVERSA                      ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
+procedure submenu34 (opcion:Integer);
+begin
+  clrscr;
+  writeln('--------------------------------------------------------------------------------');
+  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
+  writeln('           SUB MENU 3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA            ');
+  writeln('--------------------------------------------------------------------------------');
+  Writeln;
+  readln;
+end;
+
 procedure submenu1 (opcion:integer);
 begin
       //Textos Submenu 1
@@ -23,8 +177,16 @@ begin
         GotoXY( 20, 13 );
         readln(opcion);
       //Switch submenu 1
-        //Case opcion Of
-
+        case opcion of
+          //0: menuPrincipal();
+          1: submenu11(opcion);
+          2: submenu12(opcion);
+          3: submenu13(opcion);
+          4: submenu14(opcion);
+          5: submenu15(opcion);
+          {else
+            WriteLn('Indique una opción existente')}
+        end;
 end;
 
 procedure submenu2 (opcion:integer);
@@ -49,6 +211,16 @@ begin
         GotoXY( 20, 13 );
         readln(opcion);
       //Switch submenu 2
+        case opcion of
+          //0: menuPrincipal();
+          1: submenu21(opcion);
+          2: submenu22(opcion);
+          3: submenu23(opcion);
+          4: submenu24(opcion);
+          5: submenu25(opcion);
+          {else
+            WriteLn('Indique una opción existente')}
+        end;
 end;
 
 procedure submenu3 (opcion:integer);
@@ -72,13 +244,21 @@ begin
         GotoXY( 20, 12 );
         readln(opcion);
       //Switch submenu 3
-        //case opcion of
+        case opcion of
+          //0: menuPrincipal();
+          1: submenu31(opcion);
+          2: submenu32(opcion);
+          3: submenu33(opcion);
+          4: submenu34(opcion);
+          {else
+            WriteLn('Indique una opción existente')}
+        end;
 end;
 
 procedure menuPrincipal;
 Var opcion: integer;
 begin
-  repeat
+  //repeat
     clrscr;
     writeln('--------------------------------------------------------------------------------');
     writeln('                           SISTEMA DE MANEJO MATRICES                          ');
@@ -103,10 +283,9 @@ begin
       2: submenu2(opcion);
       3: submenu3(opcion);
     End;
-  Until opcion = 0;
+  //Until opcion = 0;
   ClrScr;
 end;
-
 Begin
 { *************************  Primera entrega  *****************************
 
