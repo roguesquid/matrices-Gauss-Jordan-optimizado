@@ -9,6 +9,8 @@ begin
   writeln('                     SUB MENU 1.1 LEER MATRIZ DESDE TECLADO                     ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -20,6 +22,8 @@ begin
   writeln('                     SUB MENU 1.2 LEER MATRIZ DESDE ARCHIVO                     ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -31,6 +35,8 @@ begin
   writeln('                           SUB MENU 1.3 MOSTRAR MATRIZ                          ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -42,6 +48,8 @@ begin
   writeln('            SUB MENU 1.4 MODIFICAR ELEMENTOS EN LA MATRIZ MANUALMENTE           ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -53,6 +61,8 @@ begin
   writeln('                    SUB MENU 1.5 ALMACENAR MATRIZ EN ARCHIVO                    ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -64,6 +74,8 @@ begin
   writeln('         SUB MENU 2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA        ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -75,6 +87,8 @@ begin
   writeln('              SUB MENU 2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA              ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -86,6 +100,8 @@ begin
   writeln('                  SUB MENU 2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO                  ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -97,6 +113,8 @@ begin
   writeln('           SUB MENU 2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE           ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -108,6 +126,8 @@ begin
   writeln('        SUB MENU 2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCIÓN        ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -119,6 +139,8 @@ begin
   writeln('                       SUB MENU 3.1 HALLAR MATRIZ INVERSA                       ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -130,6 +152,8 @@ begin
   writeln('                       SUB MENU 3.2 MOSTAR MATRIZ INVERSA                       ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -141,6 +165,8 @@ begin
   writeln('                     SUB MENU 3.3 COMPROBAR MATRIZ INVERSA                      ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
@@ -152,11 +178,14 @@ begin
   writeln('           SUB MENU 3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA            ');
   writeln('--------------------------------------------------------------------------------');
   Writeln;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
 procedure submenu1 (opcion:integer);
 begin
+  repeat
       //Textos Submenu 1
         clrscr;
         writeln('--------------------------------------------------------------------------------');
@@ -187,10 +216,12 @@ begin
           {else
             WriteLn('Indique una opción existente')}
         end;
+  Until opcion = 0;
 end;
 
 procedure submenu2 (opcion:integer);
 begin
+  repeat
       //Textos Submenu 2
         clrscr;
         writeln('--------------------------------------------------------------------------------');
@@ -221,10 +252,12 @@ begin
           {else
             WriteLn('Indique una opción existente')}
         end;
+  Until opcion = 0;
 end;
 
 procedure submenu3 (opcion:integer);
 begin
+  repeat
       //Textos Submenu 3
         clrscr;
         writeln('--------------------------------------------------------------------------------');
@@ -253,12 +286,13 @@ begin
           {else
             WriteLn('Indique una opción existente')}
         end;
+  Until opcion = 0;
 end;
 
 procedure menuPrincipal;
 Var opcion: integer;
 begin
-  //repeat
+  repeat
     clrscr;
     writeln('--------------------------------------------------------------------------------');
     writeln('                           SISTEMA DE MANEJO MATRICES                          ');
@@ -283,7 +317,7 @@ begin
       2: submenu2(opcion);
       3: submenu3(opcion);
     End;
-  //Until opcion = 0;
+  Until opcion = 0;
   ClrScr;
 end;
 Begin
