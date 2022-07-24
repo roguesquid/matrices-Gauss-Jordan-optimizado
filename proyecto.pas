@@ -8,20 +8,73 @@
 Program proyecto;
 uses crt;
 
+//Variables
+type matriz = array [2..8,2..8] of real;
 
+var a:matriz;
+    n:integer;
+
+//Funciones y procedimientos de las matrices
+//--submenu 1
+{procedure crearmatriz (var x:matriz; var n:integer);
+var i,j:integer;
+begin
+    for i := 1 to n do begin
+        gotoxy(10,7+i); write('FILA ',i,' ');
+        for j := 1 to n do begin
+            gotoxy(4,6); write('Indique valor (',i,',',j,'):           ');
+            gotoxy(17+j*8,7+i);readln(x[i,j]);
+            gotoxy(17+j*8,7+i); write(x[i,j]:4:2);
+        end;
+    end;
+    writeln();
+end;}
+
+{procedure crearmatriz(var x:matriz; var n:integer);
+var i,j:integer;
+begin
+  for i:=1 to N do begin
+    for j:=1 to N do begin
+      write('  x[',i:3,',',j:3,']=');
+      readln(x[i,j]);
+    end;
+    writeln;
+  end;
+  write('La matriz fue asignada, pulse <ENTER> para volver a la pantalla anterior ...');
+end;}
+//--submenu2
+
+//--submenu3
 
 
 //Submenues
-procedure submenu11 (opcion:Integer);
+procedure submenu11 (var x:matriz;var n:integer);
+var i,j:integer;
 begin
+  //repite esto hasta que el tamaño de la matriz sea mayor a 2 y menor a 8
+  repeat
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                     SUB MENU 1.1 LEER MATRIZ DESDE TECLADO                     ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
-  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
-  WriteLn('--------------------------------------------------------------------------------');
+  gotoxy(1,1); write('--------------------------------------------------------------------------------');
+  gotoxy(27,2); write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(21,3); write('SUB MENU 1.1 LEER MATRIZ DESDE TECLADO');
+  gotoxy(1,4); write('--------------------------------------------------------------------------------');
+  
+  //encabezado de crear matriz
+  gotoxy(1,6); write('TAMANO DE LA MATRIZ (2 a 8): ');
+  readln(n);
+  until (n>=2) and (n<=8);
+  
+  //Escribir Matriz;
+  for i:=1 to N do begin
+    for j:=1 to N do begin
+      write('  x[',i:3,',',j:3,']=');
+      readln(x[i,j]);
+    end;
+    writeln;
+  end;
+
+  write('La matriz fue asignada, pulse <ENTER> para volver a la pantalla anterior ...');
+  //footer
   readln;
 end;
 
@@ -38,14 +91,23 @@ begin
   readln;
 end;
 
-procedure submenu13 (opcion:Integer);
+procedure submenu13 (var x:matriz;n:integer);
+var i,j: integer;
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                           SUB MENU 1.3 MOSTRAR MATRIZ                          ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1); write('--------------------------------------------------------------------------------');
+  gotoxy(27,2); write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(27,3); write('SUB MENU 1.3 MOSTRAR MATRIZ');
+  gotoxy(1,4); write('--------------------------------------------------------------------------------');
+
   Writeln;
+  for i:=1 to n do begin
+    for j:=1 to N do begin
+      write(x[i,j]:1:2,'  ');
+    end;
+    writeln;
+  end;
+  writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
@@ -214,18 +276,15 @@ begin
         Writeln('Marque su opcion (1 a 5) o Salir (0): ');
         WriteLn;
         writeln('--------------------------------------------------------------------------------');
-        GotoXY( 20, 13 );
+        GotoXY( 39, 13 );
         readln(opcion);
       //Switch submenu 1
         case opcion of
-          //0: menuPrincipal();
-          1: submenu11(opcion);
+          1: submenu11(a,n);
           2: submenu12(opcion);
-          3: submenu13(opcion);
+          3: submenu13(a,n);
           4: submenu14(opcion);
           5: submenu15(opcion);
-          {else
-            WriteLn('Indique una opción existente')}
         end;
   Until opcion = 0;
 end;
@@ -250,18 +309,15 @@ begin
         Writeln('Marque su opcion (1 a 5) o Salir (0): ');
         WriteLn;
         writeln('--------------------------------------------------------------------------------');
-        GotoXY( 20, 13 );
+        GotoXY( 39, 13 );
         readln(opcion);
       //Switch submenu 2
         case opcion of
-          //0: menuPrincipal();
           1: submenu21(opcion);
           2: submenu22(opcion);
           3: submenu23(opcion);
           4: submenu24(opcion);
           5: submenu25(opcion);
-          {else
-            WriteLn('Indique una opción existente')}
         end;
   Until opcion = 0;
 end;
@@ -285,17 +341,14 @@ begin
         Writeln('Marque su opcion (1 a 4) o Salir (0): ');
         WriteLn;
         writeln('--------------------------------------------------------------------------------');
-        GotoXY( 20, 12 );
+        GotoXY( 39, 12 );
         readln(opcion);
       //Switch submenu 3
         case opcion of
-          //0: menuPrincipal();
           1: submenu31(opcion);
           2: submenu32(opcion);
           3: submenu33(opcion);
           4: submenu34(opcion);
-          {else
-            WriteLn('Indique una opción existente')}
         end;
   Until opcion = 0;
 end;
@@ -320,7 +373,7 @@ begin
     writeln('                                 Realizado Por:                                 ');
     writeln('          Luis Martin <30.351.273> y Christopher Acosta <30.496.179>           ');
     writeln('--------------------------------------------------------------------------------');
-    GotoXY( 20, 10 );
+    GotoXY( 39, 10 );
     readln(opcion);
     Case opcion Of
       0: exit;
