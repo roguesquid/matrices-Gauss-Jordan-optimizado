@@ -30,7 +30,7 @@ begin
     writeln();
 end;}
 
-{procedure crearmatriz(var x:matriz; var n:integer);
+procedure crearmatriz(var x:matriz; var n:integer);
 var i,j:integer;
 begin
   for i:=1 to N do begin
@@ -41,7 +41,38 @@ begin
     writeln;
   end;
   write('La matriz fue asignada, pulse <ENTER> para volver a la pantalla anterior ...');
-end;}
+end;
+
+procedure mostrarMatriz(var x:matriz;n:integer);
+var i,j:integer;
+begin
+  for i:=1 to n do begin
+    for j:=1 to N do begin
+      write(x[i,j]:1:2,'  ');
+    end;
+    writeln;
+  end;
+end;
+
+procedure modificarMatriz(var x:matriz;n:integer);
+var e,k,i,j:integer;
+begin
+  Writeln;
+  Write('Cuantos elementos deseas modificar?: ');
+  read(e);
+  WriteLn;
+
+  for k:=1 to e do begin
+    WriteLn('Modificacion #',k);
+    Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+    readln(i);
+    Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
+    readln(j);
+    Write('Indique el nuevo valor de X[',i,',',j,']: ');
+    readln(x[i,j]);
+    WriteLn;
+  end;
+end;
 //--submenu2
 
 //--submenu3
@@ -59,22 +90,12 @@ begin
   gotoxy(21,3); write('SUB MENU 1.1 LEER MATRIZ DESDE TECLADO');
   gotoxy(1,4); write('--------------------------------------------------------------------------------');
   
-  //encabezado de crear matriz
   gotoxy(1,6); write('TAMANO DE LA MATRIZ (2 a 8): ');
   readln(n);
   until (n>=2) and (n<=8);
   
   //Escribir Matriz;
-  for i:=1 to N do begin
-    for j:=1 to N do begin
-      write('  x[',i:3,',',j:3,']=');
-      readln(x[i,j]);
-    end;
-    writeln;
-  end;
-
-  write('La matriz fue asignada, pulse <ENTER> para volver a la pantalla anterior ...');
-  //footer
+  crearmatriz(x,n);
   readln;
 end;
 
@@ -99,29 +120,27 @@ begin
   gotoxy(27,2); write('SISTEMA DE MANEJO MATRICES');
   gotoxy(27,3); write('SUB MENU 1.3 MOSTRAR MATRIZ');
   gotoxy(1,4); write('--------------------------------------------------------------------------------');
-
-  Writeln;
-  for i:=1 to n do begin
-    for j:=1 to N do begin
-      write(x[i,j]:1:2,'  ');
-    end;
-    writeln;
-  end;
+  gotoxy(1,6);mostrarMatriz(x,n);
   writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
-procedure submenu14 (opcion:Integer);
+procedure submenu14 (var x:matriz;n:Integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('            SUB MENU 1.4 MODIFICAR ELEMENTOS EN LA MATRIZ MANUALMENTE           ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
-  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  gotoxy(1,1); write('--------------------------------------------------------------------------------');
+  gotoxy(27,2); write('                           SISTEMA DE MANEJO MATRICES                          ');
+  gotoxy(12,3); write('            SUB MENU 1.4 MODIFICAR ELEMENTOS EN LA MATRIZ MANUALMENTE           ');
+  gotoxy(1,4); write('--------------------------------------------------------------------------------');
+
+  gotoxy(1,6);mostrarMatriz(x,n);
+  
+  modificarMatriz(x,n);
+  
+  WriteLn;
+  WriteLn('Matriz modificada Exitosamente! Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
@@ -283,7 +302,7 @@ begin
           1: submenu11(a,n);
           2: submenu12(opcion);
           3: submenu13(a,n);
-          4: submenu14(opcion);
+          4: submenu14(a,n);
           5: submenu15(opcion);
         end;
   Until opcion = 0;
@@ -354,9 +373,10 @@ begin
 end;
 
 procedure menuPrincipal;
-Var opcion: integer;
+Var opcion,intentos: integer;
 begin
-  repeat
+  intentos:=1;
+  while((opcion<>0) and (intentos<=3)) do begin
     clrscr;
     writeln('--------------------------------------------------------------------------------');
     writeln('                           SISTEMA DE MANEJO MATRICES                          ');
@@ -375,13 +395,16 @@ begin
     writeln('--------------------------------------------------------------------------------');
     GotoXY( 39, 10 );
     readln(opcion);
+    intentos:=intentos+1;
+    writeln(intentos);
     Case opcion Of
       0: exit;
       1: submenu1(opcion);
       2: submenu2(opcion);
       3: submenu3(opcion);
     End;
-  Until opcion = 0;
+
+  end;
   ClrScr;
 end;
 Begin
