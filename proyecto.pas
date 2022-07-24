@@ -1,6 +1,17 @@
+{ *************************  Primera entrega  *****************************
+
+  Integrantes:      <Christopher Acosta>    cédula:  <30496179>
+
+                    <Luis Martín>           cédula:  <30351273>
+
+  ************************************************************************ }
 Program proyecto;
 uses crt;
 
+
+
+
+//Submenues
 procedure submenu11 (opcion:Integer);
 begin
   clrscr;
@@ -200,7 +211,7 @@ begin
         writeln('1.5 ALMACENAR MATRIZ EN ARCHIVO');
         WriteLn('0. VOLVER AL MENU ANTERIOR');
         WriteLn;
-        Writeln('Indique su opcion: ');
+        Writeln('Marque su opcion (1 a 5) o Salir (0): ');
         WriteLn;
         writeln('--------------------------------------------------------------------------------');
         GotoXY( 20, 13 );
@@ -230,13 +241,13 @@ begin
         writeln('--------------------------------------------------------------------------------');
         Writeln;
         writeln('2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA');
-        writeln('2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA');
+        writeln('2.2 RESOLVER Y MOSTRAR SOLUCION DEL SISTEMA');
         writeln('2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO');
         writeln('2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE');
         writeln('2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCION');
         WriteLn('0. VOLVER AL MENU ANTERIOR');
         WriteLn;
-        Writeln('Indique su opcion: ');
+        Writeln('Marque su opcion (1 a 5) o Salir (0): ');
         WriteLn;
         writeln('--------------------------------------------------------------------------------');
         GotoXY( 20, 13 );
@@ -271,7 +282,7 @@ begin
         writeln('3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA');
         WriteLn('0. VOLVER AL MENU ANTERIOR');
         WriteLn;
-        Writeln('Indique su opcion: ');
+        Writeln('Marque su opcion (1 a 4) o Salir (0): ');
         WriteLn;
         writeln('--------------------------------------------------------------------------------');
         GotoXY( 20, 12 );
@@ -303,7 +314,7 @@ begin
     writeln('3. MATRIZ INVERSA');
     WriteLn('0. SALIR');
     Writeln;
-    Write('Indique su opcion: ');
+    Write('Marque su opcion (1 a 5) o Salir (0): ');
     WriteLn;
     writeln('--------------------------------------------------------------------------------');
     writeln('                                 Realizado Por:                                 ');
@@ -321,12 +332,5 @@ begin
   ClrScr;
 end;
 Begin
-{ *************************  Primera entrega  *****************************
-
-  Integrantes:      <Christopher Acosta>    cédula:  <30496179>
-
-                    <Luis Martín>           cédula:  <30351273>
-
-  ************************************************************************ }
   menuPrincipal();
 End.
