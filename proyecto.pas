@@ -60,6 +60,40 @@ end;
     else
         writeLn('El fichero DATOS.TXT no existe!');
 end. }
+//esta funcion no existe en devpascal por eso no la implementé
+
+//faltan las comprobaciones de si existe el archivo
+procedure leerMatrizDesdeArchivo(var x:matriz;n:integer);
+var nombre,linea,longitud:string;
+    archivo:text;
+    contador:integer;
+begin
+  write('Ingrese el nombre del archivo: ');
+  read(nombre);
+
+  Assign(archivo,nombre);
+  Reset(archivo);
+
+  readln(archivo, longitud);
+  //comprobacion de tener todos los datos necesarios segun longitud de matriz
+  if (longitud>=2) and (longitud<=8) then begin  
+    while not(eof(archivo)) do begin
+      contador:=contador+1;
+    end;
+    if ((contador+1)=Sqr(longitud)) then begin
+      //si se cumplen todas las condiciones
+      
+    end
+      else begin
+        WriteLn('El archivo introducido no contiene los datos suficientes para escribir en la matriz');
+        WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+      end;
+  end else begin
+    Writeln('La longitud de la matriz en el archivo es mayor o menor a la permitida');
+    WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  end;
+  close(archivo);
+end;
 
 procedure modificarMatriz(var x:matriz;n:integer);
 var e,k,i,j:integer;
@@ -128,11 +162,13 @@ end;
 procedure submenu12 (var x:matriz;var n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                     SUB MENU 1.2 LEER MATRIZ DESDE ARCHIVO                     ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
+  gotoxy(1,1); writeln('--------------------------------------------------------------------------------');
+  gotoxy(27,2); writeln('SISTEMA DE MANEJO MATRICES');
+  gotoxy(21,3); writeln('SUB MENU 1.2 LEER MATRIZ DESDE ARCHIVO');
+  gotoxy(1,4); writeln('--------------------------------------------------------------------------------');
+  
+  leerMatrizDesdeArchivo(x,n);
+
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
