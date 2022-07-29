@@ -54,6 +54,13 @@ begin
   end;
 end;
 
+{begin 
+    if FileExists( 'DATOS.TXT' ) then
+        writeLn('El fichero DATOS.TXT existe.')
+    else
+        writeLn('El fichero DATOS.TXT no existe!');
+end. }
+
 procedure modificarMatriz(var x:matriz;n:integer);
 var e,k,i,j:integer;
 begin
@@ -72,6 +79,25 @@ begin
     readln(x[i,j]);
     WriteLn;
   end;
+end;
+
+procedure almacenarMatrizEnArchivo(var x:matriz;var n:integer);
+var archivo:text;
+    nombre:string;
+    i,j:integer;
+
+begin
+  write('Ingrese el nombre del archivo: ');
+  read(nombre);
+  Assign(archivo,nombre);
+  rewrite(archivo);
+  writeln(archivo, n); //aqui escribo la longitud de la matriz (como se pidió en el pdf del proyecto)
+  for i:=1 to n do begin
+    for j:=1 to n do begin
+      WriteLn(archivo, x[i,j]:1:2)//aquí escribo toda la matriz en el archivo
+    end;
+  end;
+  close(archivo);
 end;
 //--submenu2
 
@@ -99,7 +125,7 @@ begin
   readln;
 end;
 
-procedure submenu12 (opcion:Integer);
+procedure submenu12 (var x:matriz;var n:integer);
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -145,14 +171,16 @@ begin
   readln;
 end;
 
-procedure submenu15 (opcion:Integer);
+procedure submenu15 (var x:matriz;var n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                    SUB MENU 1.5 ALMACENAR MATRIZ EN ARCHIVO                    ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
+  gotoxy(1,1); writeln('--------------------------------------------------------------------------------');
+  gotoxy(27,2); writeln('SISTEMA DE MANEJO MATRICES');
+  gotoxy(20,3); writeln('SUB MENU 1.5 ALMACENAR MATRIZ EN ARCHIVO');
+  gotoxy(1,4); writeln('--------------------------------------------------------------------------------');
+  
+  almacenarMatrizEnArchivo(x,n);
+
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
@@ -300,10 +328,10 @@ begin
       //Switch submenu 1
         case opcion of
           1: submenu11(a,n);
-          2: submenu12(opcion);
+          2: submenu12(a,n);
           3: submenu13(a,n);
           4: submenu14(a,n);
-          5: submenu15(opcion);
+          5: submenu15(a,n);
         end;
   Until opcion = 0;
 end;
