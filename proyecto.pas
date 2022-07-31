@@ -11,7 +11,7 @@ uses crt;
 //Variables
 type matriz = array [2..8,2..8] of real;
 
-var a,inv:matriz;
+var a,Maux,inv:matriz;
     n:integer;
 
 //Funciones y procedimientos de las matrices
@@ -30,13 +30,14 @@ begin
     writeln();
 end;}
 
-procedure crearmatriz(var x:matriz; var n:integer);
+procedure crearmatriz(var x,Maux:matriz; var n:integer);
 var i,j:integer;
 begin
   for i:=1 to N do begin
     for j:=1 to N do begin
       write('  x[',i:3,',',j:3,']=');
       readln(x[i,j]);
+      Maux[i,j]:=x[i,j];
     end;
     writeln;
   end;
@@ -138,6 +139,11 @@ begin
     end;
   end;
   close(archivo);
+
+  {gotoxy(1,n+4);Write('Matriz guardada exitosamente en: ', nombre);
+  gotoxy(1,n+5);Write('Pulse <ENTER> para volver a la pantalla anterior ...');
+  gotoxy(1,n+6);Write('--------------------------------------------------------------------------------');
+  readln;}
 end;
 //--submenu2
 
@@ -179,13 +185,34 @@ begin
       end;  
     end;
   end;
+end;
 
-  
+procedure almacenarMatrizInvEnArchivo(var x,inversa:matriz;var n:integer);
+var archivo:text;
+    nombre:string;
+    i,j:integer;
+
+begin
+  write('Ingrese el nombre del archivo: ');
+  read(nombre);
+  Assign(archivo,nombre);
+  rewrite(archivo);
+  writeln(archivo, n); //aqui escribo la longitud de la matriz (como se pidió en el pdf del proyecto)
+  for i:=1 to n do begin
+    for j:=1 to n do begin
+      WriteLn(archivo, x[i,j]:1:2)//aquí escribo toda la matriz en el archivo
+    end;
+  end;
+  for i:=1 to n do begin
+    for j:=1 to n do begin
+      WriteLn(archivo, inversa[i,j]:1:2)//aquí escribo toda la matriz en el archivo
+    end;
+  end;
+  close(archivo);
 end;
 
 //SubSubMenus
-procedure submenu11 (var x:matriz;var n:integer);
-var i,j:integer;
+procedure submenu11 (var x,Maux:matriz;var n:integer);
 begin
   //repite esto hasta que el tamaño de la matriz sea mayor a 2 y menor a 8
   repeat
@@ -200,7 +227,7 @@ begin
   until (n>=2) and (n<=8);
   
   //Escribir Matriz;
-  crearmatriz(x,n);
+  crearmatriz(x,Maux,n);
   readln;
 end;
 
@@ -220,7 +247,6 @@ begin
 end;
 
 procedure submenu13 (var x:matriz;n:integer);
-var i,j: integer;
 begin
   clrscr;
   gotoxy(1,1); write('--------------------------------------------------------------------------------');
@@ -261,13 +287,9 @@ begin
   gotoxy(1,4); writeln('--------------------------------------------------------------------------------');
   
   almacenarMatrizEnArchivo(x,n);
-
-  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
-  WriteLn('--------------------------------------------------------------------------------');
-  readln;
 end;
 
-procedure submenu21 (opcion:Integer);
+procedure submenu21 ();
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -280,7 +302,7 @@ begin
   readln;
 end;
 
-procedure submenu22 (opcion:Integer);
+procedure submenu22 ();
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -293,7 +315,7 @@ begin
   readln;
 end;
 
-procedure submenu23 (opcion:Integer);
+procedure submenu23 ();
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -306,7 +328,7 @@ begin
   readln;
 end;
 
-procedure submenu24 (opcion:Integer);
+procedure submenu24 ();
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -319,7 +341,7 @@ begin
   readln;
 end;
 
-procedure submenu25 (opcion:Integer);
+procedure submenu25 ();
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -370,10 +392,13 @@ end;
 procedure submenu33 (var x,inversa:matriz;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                     SUB MENU 3.3 COMPROBAR MATRIZ INVERSA                      ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(21,3);write('SUB MENU 3.3 COMPROBAR MATRIZ INVERSA');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  
+  
+  
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
@@ -383,10 +408,13 @@ end;
 procedure submenu34 (var x,inversa:matriz;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('           SUB MENU 3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA            ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(11,3);write('SUB MENU 3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  
+  gotoxy(1,6);almacenarMatrizInvEnArchivo(x,inversa,n);
+  
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
@@ -399,26 +427,25 @@ begin
   repeat
       //Textos Submenu 1
         clrscr;
-        writeln('--------------------------------------------------------------------------------');
-        writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-        writeln('                             SUB MENU 1. LEER MATRIZ                            ');
-        writeln('--------------------------------------------------------------------------------');
-        Writeln;
-        writeln('1.1 LEER MATRIZ DESDE TECLADO');
-        writeln('1.2 LEER MATRIZ DESDE ARCHIVO');
-        writeln('1.3 MOSTRAR MATRIZ');
-        writeln('1.4 MODIFICAR ELEMENTOS EN LA MATRIZ MANUALMENTE');
-        writeln('1.5 ALMACENAR MATRIZ EN ARCHIVO');
-        WriteLn('0. VOLVER AL MENU ANTERIOR');
-        WriteLn;
-        Writeln('Marque su opcion (1 a 5) o Salir (0): ');
-        WriteLn;
-        writeln('--------------------------------------------------------------------------------');
-        GotoXY( 39, 13 );
-        readln(opcion);
+        gotoxy(1,1);write('--------------------------------------------------------------------------------');
+        gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+        gotoxy(29,3);write('SUB MENU 1. LEER MATRIZ');
+        gotoxy(1,4);write('--------------------------------------------------------------------------------');
+
+        gotoxy(1,6);write('1.1 LEER MATRIZ DESDE TECLADO');
+        gotoxy(1,7);write('1.2 LEER MATRIZ DESDE ARCHIVO');
+        gotoxy(1,8);write('1.3 MOSTRAR MATRIZ');
+        gotoxy(1,9);write('1.4 MODIFICAR ELEMENTOS EN LA MATRIZ MANUALMENTE');
+        gotoxy(1,10);write('1.5 ALMACENAR MATRIZ EN ARCHIVO');
+        gotoxy(1,11);Write('0. VOLVER AL MENU ANTERIOR');
+
+        gotoxy(1,13);Write('Marque su opcion (1 a 5) o Salir (0): ');
+
+        gotoxy(1,15);write('--------------------------------------------------------------------------------');
+        gotoxy(39,13);readln(opcion);
       //Switch submenu 1
         case opcion of
-          1: submenu11(a,n);
+          1: submenu11(a,Maux,n);
           2: submenu12(a,n);
           3: submenu13(a,n);
           4: submenu14(a,n);
@@ -432,30 +459,29 @@ begin
   repeat
       //Textos Submenu 2
         clrscr;
-        writeln('--------------------------------------------------------------------------------');
-        writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-        writeln('                    SUB MENU 2. RESOLVER SISTEMA DE ECUACIONES                  ');
-        writeln('--------------------------------------------------------------------------------');
-        Writeln;
-        writeln('2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA');
-        writeln('2.2 RESOLVER Y MOSTRAR SOLUCION DEL SISTEMA');
-        writeln('2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO');
-        writeln('2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE');
-        writeln('2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCION');
-        WriteLn('0. VOLVER AL MENU ANTERIOR');
-        WriteLn;
-        Writeln('Marque su opcion (1 a 5) o Salir (0): ');
-        WriteLn;
-        writeln('--------------------------------------------------------------------------------');
-        GotoXY( 39, 13 );
-        readln(opcion);
+        gotoxy(1,1);write('--------------------------------------------------------------------------------');
+        gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+        gotoxy(20,3);write('SUB MENU 2. RESOLVER SISTEMA DE ECUACIONES');
+        gotoxy(1,4);write('--------------------------------------------------------------------------------');
+
+        gotoxy(1,6);write('2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA');
+        gotoxy(1,7);write('2.2 RESOLVER Y MOSTRAR SOLUCION DEL SISTEMA');
+        gotoxy(1,8);write('2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO');
+        gotoxy(1,9);write('2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE');
+        gotoxy(1,10);write('2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCION');
+        gotoxy(1,11);Write('0. VOLVER AL MENU ANTERIOR');
+
+        gotoxy(1,13);Write('Marque su opcion (1 a 5) o Salir (0): ');
+
+        gotoxy(1,15);write('--------------------------------------------------------------------------------');
+        gotoxy(39,13);readln(opcion);
       //Switch submenu 2
         case opcion of
-          1: submenu21(opcion);
-          2: submenu22(opcion);
-          3: submenu23(opcion);
-          4: submenu24(opcion);
-          5: submenu25(opcion);
+          1: submenu21();
+          2: submenu22();
+          3: submenu23();
+          4: submenu24();
+          5: submenu25();
         end;
   Until opcion = 0;
 end;
@@ -465,27 +491,26 @@ begin
   repeat
       //Textos Submenu 3
         clrscr;
-        writeln('--------------------------------------------------------------------------------');
-        writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-        writeln('                           SUB MENU 3. MATRIZ INVERSA                           ');
-        writeln('--------------------------------------------------------------------------------');
-        Writeln;
-        writeln('3.1 HALLAR MATRIZ INVERSA');
-        writeln('3.2 MOSTAR MATRIZ INVERSA');
-        writeln('3.3 COMPROBAR MATRIZ INVERSA');
-        writeln('3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA');
-        WriteLn('0. VOLVER AL MENU ANTERIOR');
-        WriteLn;
-        Writeln('Marque su opcion (1 a 4) o Salir (0): ');
-        WriteLn;
-        writeln('--------------------------------------------------------------------------------');
-        GotoXY( 39, 12 );
-        readln(opcion);
+        gotoxy(1,1);write('--------------------------------------------------------------------------------');
+        gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+        gotoxy(27,3);write('SUB MENU 3. MATRIZ INVERSA');
+        gotoxy(1,4);write('--------------------------------------------------------------------------------');
+
+        gotoxy(1,6);write('3.1 HALLAR MATRIZ INVERSA');
+        gotoxy(1,7);write('3.2 MOSTAR MATRIZ INVERSA');
+        gotoxy(1,8);write('3.3 COMPROBAR MATRIZ INVERSA');
+        gotoxy(1,9);write('3.4 GUARDAR EN ARCHIVO MATRIZ ORIGINAL E INVERSA');
+        gotoxy(1,10);write('0. VOLVER AL MENU ANTERIOR');
+
+        gotoxy(1,12);write('Marque su opcion (1 a 4) o Salir (0): ');
+
+        gotoxy(1,14);write('--------------------------------------------------------------------------------');
+        gotoxy(39,12);readln(opcion);
       //Switch submenu 3
         case opcion of
-          1: submenu31(a,inv,n);
-          2: submenu32(a,inv,n);
-          3: submenu33(a,inv,n);
+          1: submenu31(Maux,inv,n);
+          2: submenu32(Maux,inv,n);
+          3: submenu33(Maux,inv,n);
           4: submenu34(a,inv,n);
         end;
   Until opcion = 0;
@@ -494,26 +519,23 @@ end;
 procedure menuPrincipal;
 Var opcion,intentos: integer;
 begin
-  intentos:=1;
+  intentos:=0;
   while((opcion<>0) and (intentos<=3)) do begin
     clrscr;
-    writeln('--------------------------------------------------------------------------------');
-    writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-    writeln('--------------------------------------------------------------------------------');
-    writeln();
-    writeln('1. LEER MATRIZ');
-    writeln('2. SISTEMA DE ECUACIONES');
-    writeln('3. MATRIZ INVERSA');
-    WriteLn('0. SALIR');
-    Writeln;
-    Write('Marque su opcion (1 a 5) o Salir (0): ');
-    WriteLn;
-    writeln('--------------------------------------------------------------------------------');
-    writeln('                                 Realizado Por:                                 ');
-    writeln('          Luis Martin <30.351.273> y Christopher Acosta <30.496.179>           ');
-    writeln('--------------------------------------------------------------------------------');
-    GotoXY( 39, 10 );
-    readln(opcion);
+    gotoxy(1,1);write('--------------------------------------------------------------------------------');
+    gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+    gotoxy(1,3);write('--------------------------------------------------------------------------------');
+    gotoxy(1,5);write('1. LEER MATRIZ');
+    gotoxy(1,6);write('2. SISTEMA DE ECUACIONES');
+    gotoxy(1,7);write('3. MATRIZ INVERSA');
+    gotoxy(1,8);Write('0. SALIR');
+    gotoxy(1,10);Write('Marque su opcion (1 a 5) o Salir (0): ');
+
+    gotoxy(1,12);write('--------------------------------------------------------------------------------');
+    gotoxy(33,13);write('Realizado Por:');
+    gotoxy(10,14);write('Luis Martin <30.351.273> y Christopher Acosta <30.496.179>');
+    gotoxy(1,15);write('--------------------------------------------------------------------------------');
+    gotoxy(39,10); readln(opcion);
     intentos:=intentos+1;
     writeln(intentos);
     Case opcion Of
