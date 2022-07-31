@@ -11,7 +11,7 @@ uses crt;
 //Variables
 type matriz = array [2..8,2..8] of real;
 
-var a:matriz;
+var a,inv:matriz;
     n:integer;
 
 //Funciones y procedimientos de las matrices
@@ -64,9 +64,9 @@ end. }
 
 //faltan las comprobaciones de si existe el archivo
 procedure leerMatrizDesdeArchivo(var x:matriz;n:integer);
-var nombre,linea,longitud:string;
+var nombre:string;
     archivo:text;
-    contador:integer;
+    linea,longitud,contador,i,j:integer;
 begin
   write('Ingrese el nombre del archivo: ');
   read(nombre);
@@ -82,7 +82,13 @@ begin
     end;
     if ((contador+1)=Sqr(longitud)) then begin
       //si se cumplen todas las condiciones
-      
+      n:=longitud;
+      for i:=1 to n do begin
+        for j:=1 to n do begin
+          readln(archivo,linea);
+          x[i,j]:=linea;
+        end;
+      end;  
     end
       else begin
         WriteLn('El archivo introducido no contiene los datos suficientes para escribir en la matriz');
@@ -136,9 +142,48 @@ end;
 //--submenu2
 
 //--submenu3
+procedure matrizInversa(var x,inversa:matriz;var n:integer);
+var i,j,k:integer;
+    aux, diag:real;
 
+begin
+  //crea la matriz identidad
+  for i:=1 to n do begin
+    for j:=1 to n do begin
+      inversa[i,j]:=0;
+      if (i=j) then
+        inversa[i,j]:=1;
+    end;
+  end; 
 
-//Submenues
+  //calcular matriz inversa
+  //este for se mueve por la diagonal
+  for i:=1 to n do begin
+    diag:=x[i,i];
+
+    //este for se mueve por toda la fila de la matriz normal y de la identidad, aplicando la operacion en toda la fila
+    for k:=1 to n do begin
+      x[i,k]:=x[i,k]/diag;
+      inversa[i,k]:=inversa[i,k]/diag;    
+    end; //ya aqui este elemento de la diagonal vale 1
+    
+    //este for se mueve por toda la columna reduciendo a 0s los elementos que no son de la diagonal
+    for j:=1 to n do begin
+      //solo efectua la operacion en los elementos que no formen parte de la diagonal
+      if (i<>j) then begin
+        aux:=x[j,i];
+        for k:=0 to n do begin
+          x[j,k]:=x[j,k]-aux*x[i,k];
+          inversa[j,k]:=inversa[j,k]-aux*inversa[i,k];
+        end;
+      end;  
+    end;
+  end;
+
+  
+end;
+
+//SubSubMenus
 procedure submenu11 (var x:matriz;var n:integer);
 var i,j:integer;
 begin
@@ -287,33 +332,42 @@ begin
   readln;
 end;
 
-procedure submenu31 (opcion:Integer);
+procedure submenu31 (var x,inversa:matriz;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                       SUB MENU 3.1 HALLAR MATRIZ INVERSA                       ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(23,3);write('SUB MENU 3.1 HALLAR MATRIZ INVERSA');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+
+  matrizInversa(x,inversa,n);
+  gotoxy(1,6);write('La matriz inversa es: ');
+  gotoxy(1,8);mostrarMatriz(inversa,n);
+  
+  WriteLn;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
-procedure submenu32 (opcion:Integer);
+procedure submenu32 (var x,inversa:matriz;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                       SUB MENU 3.2 MOSTAR MATRIZ INVERSA                       ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(23,3);write('SUB MENU 3.2 MOSTAR MATRIZ INVERSA');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  
+  gotoxy(1,6);write('La matriz inversa es: ');
+  gotoxy(1,8);mostrarMatriz(inversa,n);
+  
+  WriteLn;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
-procedure submenu33 (opcion:Integer);
+procedure submenu33 (var x,inversa:matriz;n:integer);
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -326,7 +380,7 @@ begin
   readln;
 end;
 
-procedure submenu34 (opcion:Integer);
+procedure submenu34 (var x,inversa:matriz;n:integer);
 begin
   clrscr;
   writeln('--------------------------------------------------------------------------------');
@@ -339,6 +393,7 @@ begin
   readln;
 end;
 
+//submenus
 procedure submenu1 (opcion:integer);
 begin
   repeat
@@ -428,10 +483,10 @@ begin
         readln(opcion);
       //Switch submenu 3
         case opcion of
-          1: submenu31(opcion);
-          2: submenu32(opcion);
-          3: submenu33(opcion);
-          4: submenu34(opcion);
+          1: submenu31(a,inv,n);
+          2: submenu32(a,inv,n);
+          3: submenu33(a,inv,n);
+          4: submenu34(a,inv,n);
         end;
   Until opcion = 0;
 end;
