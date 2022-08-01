@@ -64,10 +64,11 @@ end. }
 //esta funcion no existe en devpascal por eso no la implementé
 
 //faltan las comprobaciones de si existe el archivo
-procedure leerMatrizDesdeArchivo(var x:matriz;n:integer);
+procedure leerMatrizDesdeArchivo(var x:matriz;var n:integer);
 var nombre:string;
     archivo:text;
-    linea,longitud,contador,i,j:integer;
+    longitud,contador,i,j:integer;
+    linea:real;
 begin
   write('Ingrese el nombre del archivo: ');
   read(nombre);
@@ -76,28 +77,37 @@ begin
   Reset(archivo);
 
   readln(archivo, longitud);
+  
   //comprobacion de tener todos los datos necesarios segun longitud de matriz
-  if (longitud>=2) and (longitud<=8) then begin  
+  if (longitud>=2) and (longitud<=8) then begin 
+    contador:=0;
     while not(eof(archivo)) do begin
+      readln(archivo);
       contador:=contador+1;
     end;
-    if ((contador+1)=Sqr(longitud)) then begin
+    if ((contador)=Sqr(longitud)) then begin
       //si se cumplen todas las condiciones
       n:=longitud;
+      Reset(archivo); //reinicio el archivo porque lo lei completo en el ciclo anterior
+      ReadLn(archivo); //salto la primera linea que es de la longitud de la matriz
       for i:=1 to n do begin
         for j:=1 to n do begin
           readln(archivo,linea);
           x[i,j]:=linea;
         end;
-      end;  
+      end;
+      WriteLn('La matriz fue leida correctamente del archivo');
+      readln;
     end
       else begin
         WriteLn('El archivo introducido no contiene los datos suficientes para escribir en la matriz');
         WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+        readln();
       end;
   end else begin
     Writeln('La longitud de la matriz en el archivo es mayor o menor a la permitida');
     WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+    readln();
   end;
   close(archivo);
 end;
@@ -239,9 +249,9 @@ begin
   gotoxy(21,3); writeln('SUB MENU 1.2 LEER MATRIZ DESDE ARCHIVO');
   gotoxy(1,4); writeln('--------------------------------------------------------------------------------');
   
-  leerMatrizDesdeArchivo(x,n);
+  gotoxy(1,6);leerMatrizDesdeArchivo(x,n);
 
-  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  gotoxy(1,9);WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
