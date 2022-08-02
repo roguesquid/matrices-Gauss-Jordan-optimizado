@@ -11,7 +11,7 @@ uses crt;
 //Variables
 type matriz = array [2..8,2..8] of real;
 
-var a,Maux,inv:matriz;
+var a,Maux,inv,matAuxIden:matriz;
     n:integer;
 
 //Funciones y procedimientos de las matrices
@@ -173,11 +173,6 @@ begin
     end;
   end;
   close(archivo);
-
-  {gotoxy(1,n+4);Write('Matriz guardada exitosamente en: ', nombre);
-  gotoxy(1,n+5);Write('Pulse <ENTER> para volver a la pantalla anterior ...');
-  gotoxy(1,n+6);Write('--------------------------------------------------------------------------------');
-  readln;}
 end;
 //--submenu2
 
@@ -219,6 +214,22 @@ begin
       end;  
     end;
   end;
+end;
+
+procedure comprobarMatrizInv(var x,inversa,matAuxIden:matriz;n:integer);
+var i,j,k:Integer;
+    c,aux:real;
+begin
+for i:= 1 to n do begin
+  for j := 1 to n do begin 
+    for k := 1 to n do begin
+      c:=x[i,k] * inv[k,j];
+      aux := aux + c;
+    end;
+    matAuxIden[i,j] := aux;
+    aux:=0;
+  end;
+end;
 end;
 
 procedure almacenarMatrizInvEnArchivo(var x,inversa:matriz;var n:integer);
@@ -425,7 +436,7 @@ begin
   readln;
 end;
 
-procedure submenu33 ({var x,inversa:matriz;n:integer});
+procedure submenu33 (var x,inversa,matAuxIden:matriz;n:integer);
 begin
   clrscr;
   gotoxy(1,1);write('--------------------------------------------------------------------------------');
@@ -433,7 +444,16 @@ begin
   gotoxy(21,3);write('SUB MENU 3.3 COMPROBAR MATRIZ INVERSA');
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
   
+  gotoxy(1,6);comprobarMatrizInv(x,inversa, matAuxIden,n);
   
+  WriteLn('Matrix original: ');
+  mostrarMatriz(x,n);
+  Writeln;
+  WriteLn('Matrix inversa: ');
+  mostrarMatriz(inversa,n);
+  Writeln;
+  WriteLn('Matrix original*inversa (matriz identidad): ');
+  mostrarMatriz(matAuxIden,n);
   
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -560,7 +580,7 @@ begin
         case opcion of
           1: submenu31(Maux,inv,n);
           2: submenu32(inv,n);
-          3: submenu33({Maux,inv,n});
+          3: submenu33(a,inv,matAuxIden,n);
           4: submenu34(a,inv,n);
         end;
       end;
