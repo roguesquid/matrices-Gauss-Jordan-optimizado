@@ -126,7 +126,6 @@ begin
             v[i]:= v[i] - (v[i]*m[j,i]); // Multiplica con la var indep. y la resta con si
             for c:=1 to n do // Va de cada numero en la fila restando el valor multiplicado
                 m[j,c]:= m[j,c] - b[c];
-            writeln(b[c]);
     end;
   end;
 end;
