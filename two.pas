@@ -115,20 +115,18 @@ begin
         // Reemplazar diagonal con 1
         if (m[i,i] <> 1) and (m[i,i] <> 0) then
           for c:= 1 to n do
-            m[i,c]:= m[i,c]/m[i,i];
-          v[i]:= v[i]/m[i,i];
+            m[i,c]:= (m[i,c]/m[i,i]);
+          v[i]:= (v[i]/m[i,i]);
         
         // Si no es diagonal, multiplicar la Fila i (aquella fila con 1) por el valor a quitar y restar con la Fila j para cancelar 
         if (m[j,i] <> 0) and (j <> i) then
             for x:= 1 to n do // Multiplica la fila y la guarda los valores multiplicados en un vector 2D 
-                if (b[x] = 0) then
-                  b[x]:= 1
-                else
-                    b[x]:= b[x]*m[j,i];
+                b[x] := m[i,c]*m[j,i];
             // mostrarvector(b,n); //de-bug
             v[i]:= v[i] - (v[i]*m[j,i]); // Multiplica con la var indep. y la resta con si
             for c:=1 to n do // Va de cada numero en la fila restando el valor multiplicado
                 m[j,c]:= m[j,c] - b[c];
+            writeln(b[c]);
     end;
   end;
 end;
