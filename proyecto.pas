@@ -434,6 +434,7 @@ end;
 //submenus
 procedure submenu1 ();
 var opcion:integer;
+    opcionS:string;
 begin
   repeat
       //Textos Submenu 1
@@ -453,22 +454,24 @@ begin
         gotoxy(1,13);Write('Marque su opcion (1 a 5) o Salir (0): ');
 
         gotoxy(1,15);write('--------------------------------------------------------------------------------');
-        gotoxy(39,13);readln(opcion);
-      //Switch submenu 1
+        gotoxy(39,13);readln(opcionS);
+      //Switch submenu 1            
+      if ((opcionS >= '0') and (opcionS <= '5')) then begin
+        val(opcionS,opcion);
         case opcion of
           1: submenu11(a,Maux,n);
           2: submenu12(a,n);
           3: submenu13(a,n);
           4: submenu14(a,n);
           5: submenu15(a,n);
-        else
-          WriteLn('Opcion invalida. Debes Introducir un numero entre 0 y 5...');
         end;
+      end;
   Until opcion = 0;
 end;
 
 procedure submenu2 ();
 var opcion:integer;
+    opcionS:string;
 begin
   repeat
       //Textos Submenu 2
@@ -488,22 +491,24 @@ begin
         gotoxy(1,13);Write('Marque su opcion (1 a 5) o Salir (0): ');
 
         gotoxy(1,15);write('--------------------------------------------------------------------------------');
-        gotoxy(39,13);readln(opcion);
-      //Switch submenu 2
+        gotoxy(39,13);readln(opcionS);
+      //Switch submenu 2           
+      if ((opcionS >= '0') and (opcionS <= '5')) then begin
+        val(opcionS,opcion);
         case opcion of
           1: submenu21();
           2: submenu22();
           3: submenu23();
           4: submenu24();
           5: submenu25();
-        else
-          WriteLn('Opcion invalida. Debes Introducir un numero entre 0 y 5...');
         end;
+      end;
   Until opcion = 0;
 end;
 
 procedure submenu3 ();
 var opcion:integer;
+    opcionS:string;
 begin
   repeat
       //Textos Submenu 3
@@ -522,21 +527,23 @@ begin
         gotoxy(1,12);write('Marque su opcion (1 a 4) o Salir (0): ');
 
         gotoxy(1,14);write('--------------------------------------------------------------------------------');
-        gotoxy(39,12);readln(opcion);
-      //Switch submenu 3
+        gotoxy(39,12);readln(opcionS);
+      //Switch submenu 3            
+      if ((opcionS >= '0') and (opcionS <= '4')) then begin
+        val(opcionS,opcion);
         case opcion of
           1: submenu31(Maux,inv,n);
           2: submenu32(inv,n);
           3: submenu33({Maux,inv,n});
           4: submenu34(a,inv,n);
-        else
-          WriteLn('Opcion invalida. Debes Introducir un numero entre 0 y 4...');
         end;
+      end;
   Until opcion = 0;
 end;
 
 procedure menuPrincipal;
-Var opcion,intentos: integer;
+Var intentos,opcion: integer;
+    opcionS:string;
 begin
   intentos:=0;
   while((opcion<>0) and (intentos<=3)) do begin
@@ -554,16 +561,17 @@ begin
     gotoxy(33,13);write('Realizado Por:');
     gotoxy(10,14);write('Luis Martin <30.351.273> y Christopher Acosta <30.496.179>');
     gotoxy(1,15);write('--------------------------------------------------------------------------------');
-    gotoxy(39,10); readln(opcion);
-    Case opcion Of
-      0: exit;
-      1: submenu1();
-      2: submenu2();
-      3: submenu3();
-    else
-      WriteLn('Opcion invalida. Debes Introducir un numero entre 0 y 5...');
-    End;
-
+    gotoxy(39,10); readln(opcionS);
+    
+    if ((opcionS >= '0') and (opcionS <= '5')) then begin
+      val(opcionS,opcion);
+      Case opcion Of
+        0: exit;
+        1: submenu1();
+        2: submenu2();
+        3: submenu3();
+      End;
+    end;
   end;
   ClrScr;
 end;
