@@ -15,6 +15,14 @@ var a,Maux,inv:matriz;
     n:integer;
 
 //Funciones y procedimientos de las matrices
+function esNumero(caracter:string):Boolean;
+begin
+  if ((caracter >= '0') and (caracter <= '9')) then
+    esNumero:=true
+  else
+    esNumero:=false;
+end;
+
 //--submenu 1
 {procedure crearmatriz (var x:matriz; var n:integer);
 var i,j:integer;
@@ -31,18 +39,41 @@ begin
 end;}
 
 procedure crearmatriz(var x,Maux:matriz; var n:integer);
-var i,j:integer;
+var i,j,auxInt:integer;
+    auxStr:string;
 begin
   for i:=1 to N do begin
     for j:=1 to N do begin
       write('  x[',i:3,',',j:3,']=');
-      readln(x[i,j]);
+      readln(auxStr);
+      val(auxStr,auxInt);
+      x[i,j]:=auxInt;
       Maux[i,j]:=x[i,j];
     end;
     writeln;
   end;
   write('La matriz fue asignada, pulse <ENTER> para volver a la pantalla anterior ...');
 end;
+
+{procedure crearmatriz(var x,Maux:matriz; var n:integer);
+var i,j,auxInt:integer;
+    auxStr:string;
+begin
+  for i:=1 to N do begin
+    for j:=1 to N do begin
+      write('  x[',i:3,',',j:3,']=');
+      readln(auxStr);
+      if esNumero(auxStr) then begin
+        val(auxStr,auxInt);
+        x[i,j]:=auxInt;
+        Maux[i,j]:=x[i,j];
+      end else 
+        crearmatriz(x,Maux,n);
+    end;
+    writeln;
+  end;
+  write('La matriz fue asignada, pulse <ENTER> para volver a la pantalla anterior ...');
+end;}
 
 procedure mostrarMatriz(var x:matriz;n:integer);
 var i,j:integer;
@@ -55,15 +86,6 @@ begin
   end;
 end;
 
-{begin 
-    if FileExists( 'DATOS.TXT' ) then
-        writeLn('El fichero DATOS.TXT existe.')
-    else
-        writeLn('El fichero DATOS.TXT no existe!');
-end. }
-//esta funcion no existe en devpascal por eso no la implementé
-
-//faltan las comprobaciones de si existe el archivo
 procedure leerMatrizDesdeArchivo(var x:matriz;var n:integer);
 var nombre:string;
     archivo:text;
@@ -114,10 +136,12 @@ end;
 
 procedure modificarMatriz(var x:matriz;n:integer);
 var e,k,i,j:integer;
+    eS:string;
 begin
   Writeln;
   Write('Cuantos elementos deseas modificar?: ');
-  read(e);
+  read(eS);
+  val(eS,e);
   WriteLn;
 
   for k:=1 to e do begin
@@ -223,6 +247,7 @@ end;
 
 //SubSubMenus
 procedure submenu11 (var x,Maux:matriz;var n:integer);
+var nS:string;
 begin
   //repite esto hasta que el tamaño de la matriz sea mayor a 2 y menor a 8
   repeat
@@ -233,8 +258,9 @@ begin
   gotoxy(1,4); write('--------------------------------------------------------------------------------');
   
   gotoxy(1,6); write('TAMANO DE LA MATRIZ (2 a 8): ');
-  readln(n);
-  until (n>=2) and (n<=8);
+  readln(nS);//lee string
+  until (nS>='2') and (nS<='8') and esNumero(nS);//comprueba si tiene el valor adecuado y si es numero
+  val(nS,n); // convierte el string a numero y lo asigna a n
   
   //Escribir Matriz;
   crearmatriz(x,Maux,n);
