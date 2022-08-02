@@ -448,6 +448,8 @@ begin
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
   
   gotoxy(1,6);gauss(x,v,n);
+  WriteLn;
+  mostrarMatriz(x,n);
   
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -648,7 +650,7 @@ begin
           2: submenu22(Maux2,v,n);
           3: submenu23(a,v,n);
           4: submenu24(a,v,n);
-          5: submenu25(a,v,n);
+          5: submenu25(Maux2,v,n);
         end;
       end;
   Until opcion = 0;
