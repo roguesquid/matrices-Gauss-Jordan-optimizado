@@ -10,8 +10,10 @@ uses crt;
 
 //Variables
 type matriz = array [2..8,2..8] of real;
+     vector = array[1..8] of real;
 
-var a,Maux,inv,matAuxIden:matriz;
+var a,Maux,Maux2,inv,matAuxIden:matriz;
+    v:vector;
     n:integer;
 
 //Funciones y procedimientos de las matrices
@@ -38,7 +40,7 @@ begin
     writeln();
 end;}
 
-procedure crearmatriz(var x,Maux:matriz; var n:integer);
+procedure crearmatriz(var x,Maux,Maux2:matriz; var n:integer);
 var i,j,auxInt:integer;
     auxStr:string;
 begin
@@ -49,6 +51,7 @@ begin
       val(auxStr,auxInt);
       x[i,j]:=auxInt;
       Maux[i,j]:=x[i,j];
+      Maux2[i,j]:=x[i,j];
     end;
     writeln;
   end;
@@ -175,7 +178,90 @@ begin
   close(archivo);
 end;
 //--submenu2
+procedure llenarvector (var v:vector; n:integer);
+var i:integer;
+begin
+      for i:= 1 to n do begin
+        writeln('Ingrese el termino independiente ',i,': ');
+        readln(v[i]);
+    end;
+end;
+procedure mostrarMatrizVector(var x:matriz; var v:vector; n:integer);
+var i,j:integer;
+begin
+  for i:=1 to n do begin
+    for j:=1 to N do begin
+      write(x[i,j]:1:1,'  ');
+    end;
+    write('=    ',v[i]:1:1);
+    writeln;
+  end;
+end;
+procedure modificarsistema(var x:matriz;var v:vector;n:integer);
+var e,k,i,j:integer;
+begin
+  Writeln;
+  Write('Cuantos elementos deseas modificar?: ');
+  read(e);
+  WriteLn;
 
+  for k:=1 to e do begin
+    WriteLn('Modificacion #',k);
+    Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+    readln(i);
+    Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
+    readln(j);
+    if j > n then begin
+        Write('Indique el nuevo valor de V[',i,']: ');
+        readln(v[i]);
+    end
+    else
+    Write('Indique el nuevo valor de X[',i,',',j,']: ');
+    readln(x[i,j]);
+    WriteLn;
+  end;
+end;
+procedure almacenarSistemaEnArchivo(var x:matriz; var v:vector; n:integer);
+var archivo:text;
+    nombre:string;
+    i,j:integer;
+
+begin
+  write('Ingrese el nombre del archivo: ');
+  read(nombre);
+  Assign(archivo,nombre);
+  rewrite(archivo);
+  writeln(archivo, n); 
+  for i:=1 to n do begin
+    for j:=1 to n do begin
+      WriteLn(archivo, x[i,j]:1:1);
+    end;
+    WriteLn(archivo,'Solucion:',v[i]:1:1);
+  end;
+  close(archivo);
+end;
+procedure gauss(var m:matriz; var v:vector; n:integer);
+var i,j,c,x:integer; b:vector;
+begin
+  for i:= 1 to n do begin
+    for j:= 1 to n do begin 
+        // Reemplazar diagonal con 1
+        if (m[i,i] <> 1) and (m[i,i] <> 0) then
+          for c:= 1 to n do
+            m[i,c]:= (m[i,c]/m[i,i]);
+          v[i]:= (v[i]/m[i,i]);
+        
+        // Si no es diagonal, multiplicar la Fila i (aquella fila con 1) por el valor a quitar y restar con la Fila j para cancelar 
+        if (m[j,i] <> 0) and (j <> i) then
+            for x:= 1 to n do // Multiplica la fila y la guarda los valores multiplicados en un vector 2D 
+                b[x] := m[i,c]*m[j,i];
+            // mostrarvector(b,n); //de-bug
+            v[i]:= v[i] - (v[i]*m[j,i]); // Multiplica con la var indep. y la resta con si
+            for c:=1 to n do // Va de cada numero en la fila restando el valor multiplicado
+                m[j,c]:= m[j,c] - b[c];
+    end;
+  end;
+end;
 //--submenu3
 procedure matrizInversa(var x,inversa:matriz;var n:integer);
 var i,j,k:integer;
@@ -257,7 +343,7 @@ begin
 end;
 
 //SubSubMenus
-procedure submenu11 (var x,Maux:matriz;var n:integer);
+procedure submenu11 (var x,Maux,Maux2:matriz;var n:integer);
 var nS:string;
 begin
   //repite esto hasta que el tamaño de la matriz sea mayor a 2 y menor a 8
@@ -274,7 +360,7 @@ begin
   val(nS,n); // convierte el string a numero y lo asigna a n
   
   //Escribir Matriz;
-  crearmatriz(x,Maux,n);
+  crearmatriz(x,Maux,Maux2,n);
   readln;
 end;
 
@@ -336,65 +422,81 @@ begin
   almacenarMatrizEnArchivo(x,n);
 end;
 
-procedure submenu21 ();
+procedure submenu21 (var v:vector;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('         SUB MENU 2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA        ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(9,3);write('SUB MENU 2.1 LEER VECTOR DE TERMINOS INDEPENDIENTES DEL SISTEMA');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  Writeln;
+
+  gotoxy(1,6);llenarvector(v,n);
+
+  WriteLn;
+  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
+  WriteLn('--------------------------------------------------------------------------------');
+  readln;
+end;
+
+procedure submenu22 (var x:matriz;var v:vector;n:integer);
+begin
+  clrscr;
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(14,3);write('SUB MENU 2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  
+  gotoxy(1,6);gauss(x,v,n);
+  
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
-procedure submenu22 ();
+procedure submenu23 (var x:matriz;var v:vector;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('              SUB MENU 2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA              ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES ');
+  gotoxy(18,3);write('SUB MENU 2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+
+  gotoxy(1,6);mostrarMatrizVector(x,v,n);
+
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
-procedure submenu23 ();
+procedure submenu24 (var x:matriz;var v:vector;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('                  SUB MENU 2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO                  ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(11,3);write('SUB MENU 2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  
+  gotoxy(1,6);modificarSistema(x,v,n);
+  
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
   readln;
 end;
 
-procedure submenu24 ();
+procedure submenu25 (var x:matriz;var v:vector;n:integer);
 begin
   clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('           SUB MENU 2.4 MODIFICAR MATRIZ Y VECTOR ADJUNTO MANUALMENTE           ');
-  writeln('--------------------------------------------------------------------------------');
-  Writeln;
-  WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
-  WriteLn('--------------------------------------------------------------------------------');
-  readln;
-end;
-
-procedure submenu25 ();
-begin
-  clrscr;
-  writeln('--------------------------------------------------------------------------------');
-  writeln('                           SISTEMA DE MANEJO MATRICES                          ');
-  writeln('        SUB MENU 2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCIÓN        ');
-  writeln('--------------------------------------------------------------------------------');
+  gotoxy(1,1);write('--------------------------------------------------------------------------------');
+  gotoxy(27,2);write('SISTEMA DE MANEJO MATRICES');
+  gotoxy(8,3);write('SUB MENU 2.5 GUARDAR EN ARCHIVO EL SISTEMA JUNTO CON LA SOLUCIÓN');
+  gotoxy(1,4);write('--------------------------------------------------------------------------------');
+  
+  gotoxy(1,6);almacenarSistemaEnArchivo(x,v,n);
+  
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
@@ -505,7 +607,7 @@ begin
       if ((opcionS >= '0') and (opcionS <= '5')) then begin
         val(opcionS,opcion);
         case opcion of
-          1: submenu11(a,Maux,n);
+          1: submenu11(a,Maux,Maux2,n);
           2: submenu12(a,n);
           3: submenu13(a,n);
           4: submenu14(a,n);
@@ -542,11 +644,11 @@ begin
       if ((opcionS >= '0') and (opcionS <= '5')) then begin
         val(opcionS,opcion);
         case opcion of
-          1: submenu21();
-          2: submenu22();
-          3: submenu23();
-          4: submenu24();
-          5: submenu25();
+          1: submenu21(v,n);
+          2: submenu22(Maux2,v,n);
+          3: submenu23(a,v,n);
+          4: submenu24(a,v,n);
+          5: submenu25(a,v,n);
         end;
       end;
   Until opcion = 0;
