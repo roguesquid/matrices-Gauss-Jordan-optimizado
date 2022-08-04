@@ -148,15 +148,19 @@ begin
   WriteLn;
 
   for k:=1 to e do begin
-    WriteLn('Modificacion #',k);
-    Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
-    readln(i);
-    Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
-    readln(j);
-    Write('Indique el nuevo valor de X[',i,',',j,']: ');
-    readln(x[i,j]);
-    WriteLn;
-  end;
+        WriteLn('Modificacion #',k);
+        Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+        readln(i);
+        Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
+        readln(j);
+        if (i <= n) and (j <= n) then begin
+          Write('Indique el nuevo valor de X[',i,',',j,']: ');
+          readln(x[i,j]);
+        end
+        else
+          Writeln('Error! El numero asignado es mayor que el tamaño de la matriz.');
+        WriteLn;
+      end;
 end;
 
 procedure almacenarMatrizEnArchivo(var x:matriz;var n:integer);
@@ -178,12 +182,18 @@ begin
   close(archivo);
 end;
 //--submenu2
-procedure llenarvector (var v:vector; n:integer);
+procedure llenarvector (var v:vector; n:integer; var b:boolean);
 var i:integer;
 begin
+  if b then
+    writeln('Usted ya ha asignado un termino independiente, use el menu 2.4 para cambiarlo.')
+  else
+    begin
       for i:= 1 to n do begin
         writeln('Ingrese el termino independiente ',i,': ');
         readln(v[i]);
+      end;
+    b:= true;
     end;
 end;
 procedure mostrarMatrizVector(var x:matriz; var v:vector; n:integer);
@@ -198,27 +208,44 @@ begin
   end;
 end;
 procedure modificarsistema(var x:matriz;var v:vector;n:integer);
-var e,k,i,j:integer;
+var e,k,i,j,y:integer;
 begin
   Writeln;
-  Write('Cuantos elementos deseas modificar?: ');
-  read(e);
-  WriteLn;
+  Writeln('Que tipo de elemento desea modificar?');
+  Writeln('1. Matriz');
+  Writeln('2. Variable independiente');
+  readln(y);
 
-  for k:=1 to e do begin
-    WriteLn('Modificacion #',k);
-    Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
-    readln(i);
-    Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
-    readln(j);
-    if j > n then begin
-        Write('Indique el nuevo valor de V[',i,']: ');
-        readln(v[i]);
-    end
-    else
-    Write('Indique el nuevo valor de X[',i,',',j,']: ');
-    readln(x[i,j]);
-    WriteLn;
+  Writeln('Cuantos elementos deseas modificar?: ');
+  read(e);
+  case y of
+    1:
+      for k:=1 to e do begin
+        WriteLn('Modificacion #',k);
+        Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+        readln(i);
+        Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
+        readln(j);
+        if (i <= n) and (j <= n) then begin
+          Write('Indique el nuevo valor de X[',i,',',j,']: ');
+          readln(x[i,j]);
+        end
+        else
+          Writeln('Error! El numero asignado es mayor que el tamaño de la matriz.');
+        WriteLn;
+      end;
+    2:
+      for k:=1 to e do begin
+        WriteLn('Modificacion #',k);
+        Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+        readln(i);
+        if (i <= n) then begin
+          Write('Indique el nuevo valor de V[',i,']: ');
+          readln(v[i]);
+        end
+        else
+          Writeln('Error! ',i,' es mayor que el tamaño de la matriz.');
+      end;
   end;
 end;
 procedure almacenarSistemaEnArchivo(var x:matriz; var v:vector; n:integer);
@@ -422,7 +449,7 @@ begin
   almacenarMatrizEnArchivo(x,n);
 end;
 
-procedure submenu21 (var v:vector;n:integer);
+procedure submenu21 (var v:vector;n:integer; var b:boolean);
 begin
   clrscr;
   gotoxy(1,1);write('--------------------------------------------------------------------------------');
@@ -431,7 +458,7 @@ begin
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
   Writeln;
 
-  gotoxy(1,6);llenarvector(v,n);
+  gotoxy(1,6);llenarvector(v,n,b);
 
   WriteLn;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -622,6 +649,7 @@ end;
 procedure submenu2 ();
 var opcion:integer;
     opcionS:string;
+    b:boolean;
 begin
   repeat
       //Textos Submenu 2
@@ -646,7 +674,7 @@ begin
       if ((opcionS >= '0') and (opcionS <= '5')) then begin
         val(opcionS,opcion);
         case opcion of
-          1: submenu21(v,n);
+          1: submenu21(v,n,b);
           2: submenu22(Maux2,v,n);
           3: submenu23(a,v,n);
           4: submenu24(a,v,n);
