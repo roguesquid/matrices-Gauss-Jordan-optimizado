@@ -196,7 +196,7 @@ begin
     b:= true;
     end;
 end;
-procedure mostrarMatrizVector(var x:matriz; var v:vector; n:integer);
+procedure mostrarSistema(var x:matriz; var v:vector; n:integer);
 var i,j:integer;
 begin
   for i:=1 to n do begin
@@ -208,7 +208,7 @@ begin
   end;
 end;
 procedure modificarsistema(var x:matriz;var v:vector;n:integer);
-var e,k,i,j,y:integer;
+var e,k,i,j:integer; y:string;
 begin
   Writeln;
   Writeln('Que tipo de elemento desea modificar?');
@@ -219,7 +219,7 @@ begin
   Writeln('Cuantos elementos deseas modificar?: ');
   read(e);
   case y of
-    1:
+    '1':
       for k:=1 to e do begin
         WriteLn('Modificacion #',k);
         Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
@@ -234,7 +234,7 @@ begin
           Writeln('Error! El numero asignado es mayor que el tamaño de la matriz.');
         WriteLn;
       end;
-    2:
+    '2':
       for k:=1 to e do begin
         WriteLn('Modificacion #',k);
         Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
@@ -245,8 +245,10 @@ begin
         end
         else
           Writeln('Error! ',i,' es mayor que el tamaño de la matriz.');
-      end;
-  end;
+      end
+      else 
+        Writeln('Error! Valor indicado no es una opción.');
+    end;
 end;
 procedure almacenarSistemaEnArchivo(var x:matriz; var v:vector; n:integer);
 var archivo:text;
@@ -269,31 +271,30 @@ begin
 end;
 
 procedure gauss(var m:matriz; var v:vector; n:integer);
-var i,j,c,x:integer; b:vector; y,z:real;
+var i,j,c,x:integer; b:vector; z:real;
 begin
   for i:= 1 to n do begin
     for j:= 1 to n do begin 
-        // Reemplazar diagonal con 1
-        if (m[i,i] <> 1) and (m[i,i] <> 0) then begin
-          y:=m[i,i];
-          for c:= 1 to n do begin
-            z:=m[i,c];
-            m[i,c]:= (z/y);
-          end;
-          v[i]:= (v[i]/y);
+        z:= m[i,i];
+        // Crea pivote
+        if (z <> 1) and (z <> 0) then begin
+          for c:= 1 to n do
+            m[i,c]:= m[i,c]/z;
+          v[i]:= v[i]/z;
         end;
 
-        
-        // Si no es diagonal, multiplicar la Fila i (aquella fila con 1) por el valor a quitar y restar con la Fila j para cancelar 
         if (m[j,i] <> 0) and (j <> i) then begin
             for x:= 1 to n do // Multiplica la fila y la guarda los valores multiplicados en un vector 2D 
-                b[x] := m[i,c]*m[j,i];
-            v[i]:= v[i] - (v[i]*m[j,i]); // Multiplica con la var indep. y la resta con si
-            for c:=1 to n do // Va de cada numero en la fila restando el valor multiplicado
+                b[x] := m[i,x]* m[j,i];
+                b[n+1]:= v[i]*m[j,i];
+            v[j]:= v[j] - b[n+1];
+            for c:=1 to n do // Va de cada numero1 en la fila restando el valor multiplicado
                 m[j,c]:= m[j,c] - b[c];
         end;
     end;
   end;
+
+  mostrarSistema(m,v,n); 
 end;
 //--submenu3
 procedure matrizInversa(var x,inversa:matriz;var n:integer);
@@ -480,9 +481,11 @@ begin
   gotoxy(14,3);write('SUB MENU 2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA');
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
   
-  gotoxy(1,6);gauss(x,v,n);
+  gotoxy(1,6);
+  gauss(x,v,n);
   WriteLn;
-  mostrarMatrizVector(x,v,n); 
+   mostrarMatriz(Maux,n);
+  mostrarMatriz(Maux2,n);
   
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -498,7 +501,7 @@ begin
   gotoxy(18,3);write('SUB MENU 2.3 MOSTRAR MATRIZ Y VECTOR ADJUNTO');
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
 
-  gotoxy(1,6);mostrarMatrizVector(x,v,n);
+  gotoxy(1,6);mostrarSistema(x,v,n);
 
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -681,10 +684,10 @@ begin
         val(opcionS,opcion);
         case opcion of
           1: submenu21(v,n,b);
-          2: submenu22(Maux2,v,n);
+          2: submenu22(a,v,n);
           3: submenu23(a,v,n);
           4: submenu24(a,v,n);
-          5: submenu25(Maux2,v,n);
+          5: submenu25(a,v,n);
         end;
       end;
   Until opcion = 0;
