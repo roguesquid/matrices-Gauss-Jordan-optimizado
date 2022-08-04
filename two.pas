@@ -44,9 +44,9 @@ procedure mostrarvector(v:vector; n:integer);
 var i:integer;
 begin
   for i:=1 to n do begin
-    write(v[i]:1:1);
-    writeln;
+    write(v[i]:1:1,'    ');
   end;
+  writeln;
 end;
 
 procedure mostrarsistema (m:matriz; v:vector; n:integer);
@@ -55,9 +55,9 @@ begin
   for i:= 1 to n do begin
     gotoxy(5,i); write('|  ');
     for j:= 1 to n do begin 
-        write(m[i,j],'  ');
+        write(m[i,j]:1:1,'  ');
     end;
-    write('|    = |', v[i],'|');
+    write('|    = |', v[i]:1:1,'|');
   end;
 
 end;    
@@ -108,30 +108,37 @@ begin
 end;
 
 procedure gauss(var m:matriz; var v:vector; n:integer);
-var i,j,c,x:integer; b:vector;
+var i,j,c,x:integer; b:vector; z:real;
 begin
   for i:= 1 to n do begin
     for j:= 1 to n do begin 
-        // Reemplazar diagonal con 1
-        if (m[i,i] <> 1) and (m[i,i] <> 0) then
+        z:= m[i,i];
+        // Crea pivote
+        if (z <> 1) and (z <> 0) then begin
           for c:= 1 to n do
-            m[i,c]:= (m[i,c]/m[i,i]);
-          v[i]:= (v[i]/m[i,i]);
+            m[i,c]:= m[i,c]/z;
+          v[i]:= v[i]/z;
+        end;
+
+        if (m[j,i] <> 0) and (j <> i) then begin
+            for x:= 1 to n do // Multiplica la fila y la guarda los valores multiplicados en un vector 2D 
+                b[x] := m[i,x]* m[j,i];
+                b[n+1]:= v[i]*m[j,i];
+            v[j]:= v[j] - b[n+1];
+            for c:=1 to n do // Va de cada numero1 en la fila restando el valor multiplicado
+                m[j,c]:= m[j,c] - b[c];
+        end;
+
+        
         
         // Si no es diagonal, multiplicar la Fila i (aquella fila con 1) por el valor a quitar y restar con la Fila j para cancelar 
-        if (m[j,i] <> 0) and (j <> i) then
-            for x:= 1 to n do // Multiplica la fila y la guarda los valores multiplicados en un vector 2D 
-                b[x] := m[i,c]*m[j,i];
-            // mostrarvector(b,n); //de-bug
-            v[i]:= v[i] - (v[i]*m[j,i]); // Multiplica con la var indep. y la resta con si
-            for c:=1 to n do // Va de cada numero en la fila restando el valor multiplicado
-                m[j,c]:= m[j,c] - b[c];
+        
     end;
   end;
 end;
 
 begin
-    n:=2;
+    n:=3;
     crearmatriz(m,n);
     llenarvector(v,n);
     gauss(m,v,n);
