@@ -267,25 +267,31 @@ begin
   end;
   close(archivo);
 end;
+
 procedure gauss(var m:matriz; var v:vector; n:integer);
-var i,j,c,x:integer; b:vector;
+var i,j,c,x:integer; b:vector; y,z:real;
 begin
   for i:= 1 to n do begin
     for j:= 1 to n do begin 
         // Reemplazar diagonal con 1
-        if (m[i,i] <> 1) and (m[i,i] <> 0) then
-          for c:= 1 to n do
-            m[i,c]:= (m[i,c]/m[i,i]);
-          v[i]:= (v[i]/m[i,i]);
+        if (m[i,i] <> 1) and (m[i,i] <> 0) then begin
+          y:=m[i,i];
+          for c:= 1 to n do begin
+            z:=m[i,c];
+            m[i,c]:= (z/y);
+          end;
+          v[i]:= (v[i]/y);
+        end;
+
         
         // Si no es diagonal, multiplicar la Fila i (aquella fila con 1) por el valor a quitar y restar con la Fila j para cancelar 
-        if (m[j,i] <> 0) and (j <> i) then
+        if (m[j,i] <> 0) and (j <> i) then begin
             for x:= 1 to n do // Multiplica la fila y la guarda los valores multiplicados en un vector 2D 
                 b[x] := m[i,c]*m[j,i];
-            // mostrarvector(b,n); //de-bug
             v[i]:= v[i] - (v[i]*m[j,i]); // Multiplica con la var indep. y la resta con si
             for c:=1 to n do // Va de cada numero en la fila restando el valor multiplicado
                 m[j,c]:= m[j,c] - b[c];
+        end;
     end;
   end;
 end;
@@ -476,7 +482,7 @@ begin
   
   gotoxy(1,6);gauss(x,v,n);
   WriteLn;
-  mostrarMatriz(x,n);
+  mostrarMatrizVector(x,v,n); 
   
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
