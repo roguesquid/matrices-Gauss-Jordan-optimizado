@@ -188,7 +188,7 @@ end;
 procedure llenarvector (var v,vAux:vector; n:integer; var b:boolean);
 var i:integer;
 begin
-  if not(b) then //si b es falsa pasa
+  if b then //si b es falsa pasa
     writeln('Usted ya ha asignado un termino independiente, use el menu 2.4 para cambiarlo.')
   else
     begin
@@ -197,7 +197,7 @@ begin
         readln(v[i]);
         vAux[i]:=v[i];
       end;
-    b:= false;
+    b:= true;
     end;
 end;
 procedure mostrarSistema(var x:matriz; var v:vector; n:integer);
