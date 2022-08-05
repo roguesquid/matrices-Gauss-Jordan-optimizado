@@ -50,8 +50,8 @@ begin
       readln(auxStr);
       val(auxStr,auxInt);
       x[i,j]:=auxInt;
-      Maux[i,j]:=x[i,j];
-      Maux2[i,j]:=x[i,j];
+      Maux[i,j]:=auxInt;
+      Maux2[i,j]:=auxInt;
     end;
     writeln;
   end;
@@ -208,47 +208,50 @@ begin
   end;
 end;
 procedure modificarsistema(var x:matriz;var v:vector;n:integer);
-var e,k,i,j:integer; y:string;
+var eInt,k,i,j,tipoInt:integer; eStr,tipoStr:string;
 begin
   Writeln;
   Writeln('Que tipo de elemento desea modificar?');
   Writeln('1. Matriz');
   Writeln('2. Variable independiente');
-  readln(y);
-
-  Writeln('Cuantos elementos deseas modificar?: ');
-  read(e);
-  case y of
-    '1':
-      for k:=1 to e do begin
-        WriteLn('Modificacion #',k);
-        Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
-        readln(i);
-        Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
-        readln(j);
-        if (i <= n) and (j <= n) then begin
-          Write('Indique el nuevo valor de X[',i,',',j,']: ');
-          readln(x[i,j]);
+  readln(tipoStr);
+  if (esNumero(tipoStr)) then begin
+    Val(tipoStr,tipoInt);
+    Writeln('Cuantos elementos deseas modificar?: ');
+    read(eStr);
+    val(eStr,eInt);
+    case tipoInt of
+      1:
+        for k:=1 to eInt do begin
+          WriteLn('Modificacion #',k);
+          Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+          readln(i);
+          Write('Indique el numero de la columna a modificar (1 a ',n,'): ');
+          readln(j);
+          if (i <= n) and (j <= n) then begin
+            Write('Indique el nuevo valor de X[',i,',',j,']: ');
+            readln(x[i,j]);
+          end
+          else
+            Writeln('Error! El numero asignado es mayor que el tamaño de la matriz.');
+          WriteLn;
+        end;
+      2:
+        for k:=1 to eInt do begin
+          WriteLn('Modificacion #',k);
+          Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
+          readln(i);
+          if (i <= n) then begin
+            Write('Indique el nuevo valor de V[',i,']: ');
+            readln(v[i]);
+          end
+          else
+            Writeln('Error! ',i,' es mayor que el tamaño de la matriz.');
         end
-        else
-          Writeln('Error! El numero asignado es mayor que el tamaño de la matriz.');
-        WriteLn;
+        else 
+          Writeln('Error! Valor indicado no es una opción.');
       end;
-    '2':
-      for k:=1 to e do begin
-        WriteLn('Modificacion #',k);
-        Write('Indique el numero de la fila a modificar (1 a ',n,'): ');
-        readln(i);
-        if (i <= n) then begin
-          Write('Indique el nuevo valor de V[',i,']: ');
-          readln(v[i]);
-        end
-        else
-          Writeln('Error! ',i,' es mayor que el tamaño de la matriz.');
-      end
-      else 
-        Writeln('Error! Valor indicado no es una opción.');
-    end;
+  end;
 end;
 procedure almacenarSistemaEnArchivo(var x:matriz; var v:vector; n:integer);
 var archivo:text;
@@ -661,6 +664,7 @@ var opcion:integer;
     b:boolean;
 begin
   repeat
+      b:=false;
       //Textos Submenu 2
         clrscr;
         gotoxy(1,1);write('--------------------------------------------------------------------------------');
