@@ -13,8 +13,9 @@ type matriz = array [2..8,2..8] of real;
      vector = array[1..8] of real;
 
 var a,Maux,Maux2,inv,matAuxIden:matriz;
-    v:vector;
+    v,vAux:vector;
     n:integer;
+    b:boolean;
 
 //Funciones y procedimientos de las matrices
 function esNumero(caracter:string):Boolean;
@@ -89,7 +90,7 @@ begin
   end;
 end;
 
-procedure leerMatrizDesdeArchivo(var x:matriz;var n:integer);
+procedure leerMatrizDesdeArchivo(var x,Maux,Maux2:matriz;var n:integer);
 var nombre:string;
     archivo:text;
     longitud,contador,i,j:integer;
@@ -119,6 +120,8 @@ begin
         for j:=1 to n do begin
           readln(archivo,linea);
           x[i,j]:=linea;
+          Maux[i,j]:=linea;
+          Maux2[i,j]:=linea;
         end;
       end;
       WriteLn('La matriz fue leida correctamente del archivo');
@@ -182,18 +185,19 @@ begin
   close(archivo);
 end;
 //--submenu2
-procedure llenarvector (var v:vector; n:integer; var b:boolean);
+procedure llenarvector (var v,vAux:vector; n:integer; var b:boolean);
 var i:integer;
 begin
-  if b then
+  if not(b) then //si b es falsa pasa
     writeln('Usted ya ha asignado un termino independiente, use el menu 2.4 para cambiarlo.')
   else
     begin
       for i:= 1 to n do begin
         writeln('Ingrese el termino independiente ',i,': ');
         readln(v[i]);
+        vAux[i]:=v[i];
       end;
-    b:= true;
+    b:= false;
     end;
 end;
 procedure mostrarSistema(var x:matriz; var v:vector; n:integer);
@@ -401,7 +405,7 @@ begin
   readln;
 end;
 
-procedure submenu12 (var x:matriz;var n:integer);
+procedure submenu12 (var x,maux,maux2:matriz;var n:integer);
 begin
   clrscr;
   gotoxy(1,1); writeln('--------------------------------------------------------------------------------');
@@ -409,7 +413,7 @@ begin
   gotoxy(21,3); writeln('SUB MENU 1.2 LEER MATRIZ DESDE ARCHIVO');
   gotoxy(1,4); writeln('--------------------------------------------------------------------------------');
   
-  gotoxy(1,6);leerMatrizDesdeArchivo(x,n);
+  gotoxy(1,6);leerMatrizDesdeArchivo(x,maux,maux2,n);
 
   gotoxy(1,9);WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
   WriteLn('--------------------------------------------------------------------------------');
@@ -459,7 +463,7 @@ begin
   almacenarMatrizEnArchivo(x,n);
 end;
 
-procedure submenu21 (var v:vector;n:integer; var b:boolean);
+procedure submenu21 (var v,vAux:vector;n:integer; var b:boolean);
 begin
   clrscr;
   gotoxy(1,1);write('--------------------------------------------------------------------------------');
@@ -468,7 +472,7 @@ begin
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
   Writeln;
 
-  gotoxy(1,6);llenarvector(v,n,b);
+  gotoxy(1,6);llenarvector(v,vAux,n,b);
 
   WriteLn;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -484,11 +488,7 @@ begin
   gotoxy(14,3);write('SUB MENU 2.2 RESOLVER Y MOSTRAR SOLUCIÓN DEL SISTEMA');
   gotoxy(1,4);write('--------------------------------------------------------------------------------');
   
-  gotoxy(1,6);
-  gauss(x,v,n);
-  WriteLn;
-   mostrarMatriz(Maux,n);
-  mostrarMatriz(Maux2,n);
+  gotoxy(1,6);gauss(x,v,n);
   
   Writeln;
   WriteLn('Pulse <ENTER> para volver a la pantalla anterior ...');
@@ -649,7 +649,7 @@ begin
         val(opcionS,opcion);
         case opcion of
           1: submenu11(a,Maux,Maux2,n);
-          2: submenu12(a,n);
+          2: submenu12(a,Maux,Maux2,n);
           3: submenu13(a,n);
           4: submenu14(a,n);
           5: submenu15(a,n);
@@ -664,7 +664,6 @@ var opcion:integer;
     b:boolean;
 begin
   repeat
-      b:=false;
       //Textos Submenu 2
         clrscr;
         gotoxy(1,1);write('--------------------------------------------------------------------------------');
@@ -687,8 +686,8 @@ begin
       if ((opcionS >= '0') and (opcionS <= '5')) then begin
         val(opcionS,opcion);
         case opcion of
-          1: submenu21(v,n,b);
-          2: submenu22(a,v,n);
+          1: submenu21(v,vAux,n,b);
+          2: submenu22(Maux2,vAux,n);
           3: submenu23(a,v,n);
           4: submenu24(a,v,n);
           5: submenu25(a,v,n);
